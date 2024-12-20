@@ -4,6 +4,8 @@ import requests
 import argparse
 import logging
 from datetime import datetime
+import yaml
+import subprocess
 
 # 设置日志配置
 log_filename = "node_info_log.txt"
@@ -92,6 +94,36 @@ async def periodic_task(node_info, url, port, interval=1800):
             logging.info(f"Waiting for the next cycle ({interval / 60} minutes)...")
             await asyncio.sleep(interval)  # 每30分钟执行一次
 
+def update_docker_compose(node_id: str, password: str, target_port: int):
+    service = {
+        f"gost-inner-{node_id}": {
+            'image': 'gogost/gost:3.0.0-rc8',
+            'network_mode': 'host',
+            'restart': 'always',
+            'command': [
+                '-L',
+                f"relay+wss://{node_id}:{password}@0.0.0.0:{target_port}?bind=true&path=/wsl&nodelay=true&probeResist=code:403"
+            ]
+        }
+    }
+    
+    data = {}
+    data['services'] = service
+
+    with open('docker-compose.yml', 'w') as file:
+        yaml.dump(data, file)
+    
+    logging.info("Docker compose file updated successfully.")
+    # 重启docker-compose
+    logging.info("Restarting docker-compose...")
+    # Detect docker compose or docker-compose
+    try:
+        subprocess.run(["docker-compose", "down"])
+        subprocess.run(["docker-compose", "up", "-d"])
+    except FileNotFoundError:
+        subprocess.run(["docker", "compose", "down"])
+        subprocess.run(["docker", "compose", "up", "-d"])
+        
 
 def main():
     # 解析命令行参数
@@ -124,6 +156,9 @@ def main():
             'session_key': session_key,
             'password': args.password
         }
+
+        # 更新docker-compose.yml
+        update_docker_compose(args.node_id, args.password, args.port)
 
         # 启动定时任务
         logging.info("Starting periodic task to send node information...")

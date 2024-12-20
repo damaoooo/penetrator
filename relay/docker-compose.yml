@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  relay:
+    build: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # host mode
+    network_mode: host
+    command: ["python", "/app/daemon.py", "--node_id", "${NODE_ID}", "--password", "${PASSWORD}", "--port", "${BIND_PORT}", "--url", "${TARGET_URL}", "--interval", "${INTERVAL}"]
