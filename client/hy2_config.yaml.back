@@ -1,0 +1,28 @@
+auth:
+  type: userpass
+  userpass:
+    user1: pass1
+
+ignoreClientBandwidth: false
+listen: :12306
+masquerade:
+  proxy:
+    rewriteHost: true
+    url: https://genshin.hoyoverse.com/
+  type: proxy
+quic:
+  initConnReceiveWindow: 67108864
+  initStreamReceiveWindow: 26843545
+  maxConnReceiveWindow: 67108864
+  maxStreamReceiveWindow: 26843545
+
+
+acme:
+  domains:
+    - "AAA.BBB.CCC"
+  email: 'no@thanks.com'
+  type: dns
+  dns:
+    name: cloudflare
+    config:
+      cloudflare_api_token: AAAAAAAA

@@ -14,8 +14,6 @@ from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 # 使用 argparse 获取命令行参数
 def parse_args():
     parser = argparse.ArgumentParser(description="FastAPI Server for Clash File and Relay Management")
-    parser.add_argument('--clash-file', type=str, required=True, help="Path to the Clash configuration file")
-    parser.add_argument('--port', type=int, required=True, help="Port for the FastAPI server")
     parser.add_argument('--secret-key', type=str, required=True, help="Secret key for signing session keys")
     return parser.parse_args()
 
@@ -80,7 +78,7 @@ def verify_session(session_key: str = Cookie(None)):  # Use Cookie to get sessio
 @app.get("/clash_file")
 async def get_clash_file(session_key: str = Depends(verify_session)):
     try:
-        with open(args.clash_file, 'r') as f:
+        with open("/clash.yml", 'r') as f:
             clash_file_content = f.read()
         return JSONResponse(content={"clash_file": clash_file_content})
     except FileNotFoundError:
@@ -92,7 +90,7 @@ async def get_clash_file(session_key: str = Depends(verify_session)):
 async def get_relay_list(session_key: str = Depends(verify_session)):
     # 删除超时的节点
     global relay_list
-    timeout = timedelta(seconds=5)
+    timeout = timedelta(minutes=30)
     now = datetime.now()
     relay_list = {k: v for k, v in relay_list.items() if now - datetime.strptime(v["last_seen"], format_string_full) < timeout}
     return JSONResponse(content={"relay_list": relay_list})
@@ -115,4 +113,4 @@ async def update_node(node_info: NodeInfo, session_key: str = Depends(verify_ses
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=args.port)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

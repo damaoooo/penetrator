@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  hysteria2:
+    image: tobyxdd/hysteria
+    container_name: hysteria2
+    restart: always
+    ports:
+      - "12306:12306"
+    volumes:
+      - ./hy2_config.yaml:/etc/hysteria.yaml
+    command: ["server", "-c", "/etc/hysteria.yaml"]

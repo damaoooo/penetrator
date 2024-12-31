@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  coordinator:
+    build:
+      context: .
+
+    ports:
+      - "${BIND_PORT}:8000"
+    volumes:
+      - ${CLASH_FILE_PATH}:/clash.yml
+
+    restart: always
+
+    command: ["python", "/app/gateway.py", "--secret-key", "${PASSWORD}"]

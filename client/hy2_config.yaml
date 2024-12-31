@@ -1,0 +1,25 @@
+acme:
+  dns:
+    config:
+      cloudflare_api_token: E6V1GycXOBPhqUg8tMQ-x5BNgMW0nbq1orCgVyU7
+    name: cloudflare
+  domains:
+  - inner-token.damaoooo.com
+  email: no@thanks.com
+  type: dns
+auth:
+  type: userpass
+  userpass:
+  - myself: 28726c8d-3f5e-4102-a74e-07e296d31e1f
+ignoreClientBandwidth: false
+listen: :12306
+masquerade:
+  proxy:
+    rewriteHost: true
+    url: https://genshin.hoyoverse.com/
+  type: proxy
+quic:
+  initConnReceiveWindow: 67108864
+  initStreamReceiveWindow: 26843545
+  maxConnReceiveWindow: 67108864
+  maxStreamReceiveWindow: 26843545
