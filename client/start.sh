@@ -9,7 +9,7 @@ else
     print_message "Docker is not installed! Will Install it..." "$RED"
     # Install Docker
     curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
+    sh get-docker.sh --mirror Aliyun
     rm get-docker.sh
 
 fi
@@ -34,4 +34,4 @@ docker pull ghcr.io/xtls/xray-core
 docker pull certbot/dns-cloudflare
 docker pull tobyxdd/hysteria
 docker pull nginx
-
+docker pull metacubex/mohimo

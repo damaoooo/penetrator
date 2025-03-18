@@ -1,7 +1,7 @@
 acme:
   dns:
     config:
-      cloudflare_api_token: E6V1GycXOBPhqUg8tMQ-x5BNgMW0nbq1orCgVyU7
+      cloudflare_api_token: 123123123
     name: cloudflare
   domains:
   - inner-token.damaoooo.com

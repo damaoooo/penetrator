@@ -32,3 +32,6 @@ ENV/
 *.pot
 *.mo
 .env
+
+hy2_config.yaml
+client.py/hy2_config.yaml
